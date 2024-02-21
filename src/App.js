@@ -8,9 +8,13 @@ import { useState } from 'react';
 function App() {
 
     const [currentNumber, setCurrentNumber] = useState('0');
+    const ERROR_INVALID = 'Invalid Operation!';
 
     const updateCurrentNumber = (number) => {
-        setCurrentNumber(prev => `${prev === '0' ? '' : prev}${number}`);
+        if(currentNumber == ERROR_INVALID)
+            setCurrentNumber(`${number}`);
+        else
+            setCurrentNumber(prev => `${prev === '0' ? '' : prev}${number}`);
     };
 
     const clearOutput = () => {
@@ -18,9 +22,13 @@ function App() {
     };
 
     const backOneLetter = () => {
-        let newCurrent = currentNumber.substring(0, currentNumber.length -1);
+        if(currentNumber == ERROR_INVALID)  setCurrentNumber('0');
 
-        setCurrentNumber( newCurrent === '' ? '0' : newCurrent);
+        else{
+            let newCurrent = currentNumber.substring(0, currentNumber.length -1);
+   
+            setCurrentNumber( newCurrent === '' ? '0' : newCurrent);
+        }
     }
 
     const calcResult = () => {
@@ -29,8 +37,6 @@ function App() {
             return letter === 'x' ? '*' : letter === '^' ? '**' : 'sqrt';
         });
 
-        // TODO: do square operation
-
         try{
             // const result = eval(operation);
             const result = eval?.(`with (Math) ${operation}`);
@@ -38,7 +44,7 @@ function App() {
             setCurrentNumber(`${result}`);
         }
         catch{
-            setCurrentNumber('0');
+            setCurrentNumber(ERROR_INVALID);
         }
     }
 
